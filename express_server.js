@@ -46,7 +46,7 @@ app.post("/urls", (req, res) => {
   tinyString = generateRandomString();
   urlDatabase[tinyString] = req.body.longURL
   console.log(urlDatabase)
-  res.render("/urls/"+tinyString);         // Respond with 'Ok' (we will replace this)
+  res.redirect("/urls/"+tinyString);         // Respond with 'Ok' (we will replace this)
 });
 
 function generateRandomString() {
