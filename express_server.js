@@ -40,3 +40,21 @@ app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
   res.render("urls_show", templateVars);
 });
+
+app.post("/urls", (req, res) => {
+  console.log(req.body.longURL);
+  tinyString = generateRandomString();
+  urlDatabase[tinyString] = req.body.longURL
+  console.log(urlDatabase)
+  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+});
+
+function generateRandomString() {
+  let result = '';
+  let chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890';
+  let charsLen = chars.length;
+  for (let i = 0; i < 6; i ++) {
+    result += chars.charAt(Math.floor(Math.random() * charsLen));
+  }
+  return result;
+}
