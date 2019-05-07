@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <% include ../views/partials/_header %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -10,8 +11,7 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
-    <h1>TinyApp</h1>
-    <a href='#'>Create New TinyURL</a>
+
     <h3> My URLs </h3>
     <u1>
       <%for (url in urls) {%>
