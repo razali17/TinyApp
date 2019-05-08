@@ -3,7 +3,9 @@
     <h1>TinyApp</h1>
     <a href='http://localhost:8080/url/new'>Create New TinyURL</a>
     <% if (username) { %>
-    <b>Currently logged in:</b> <%= username%></h5><button type="logout" class="btn btn-primary">Logout</button>
+    <b>Currently logged in:</b> <%= username%></h5>
+    <form method="POST" action="/logout/">
+    <button type="logout" class="btn btn-primary">Logout</button>
     <% } else { %>
     <form method="POST" action="/login/">
       <div class="form-group mb-2">
