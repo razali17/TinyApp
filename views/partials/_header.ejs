@@ -1,11 +1,14 @@
     <!DOCTYPE html>
     <html lang="en">
     <h1>TinyApp</h1>
-    <a href='#'>Create New TinyURL</a>
+    <a href='http://localhost:8080/url/new'>Create New TinyURL</a>
+    <% if (username) { %>
+    <b>Currently logged in:</b> <%= username%></h5><button type="logout" class="btn btn-primary">Logout</button>
+    <% } else { %>
     <form method="POST" action="/login/">
       <div class="form-group mb-2">
         <label for="username">username:</label>
         <input class="form-control" type= "text" name="username" placeholder="Enter a new username"/>
-        <button type="submit" class="btn btn-primary">Save Username</button>
+        <button type="submit" class="btn btn-primary">Save Username</button><% } %>
     </div>
   </form>
