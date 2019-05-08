@@ -72,7 +72,7 @@ app.post("/urls/:shortURL", (req, res) => {
   res.redirect("/urls/");         // Respond with 'Ok' (we will replace this)
 });
 
-// app.post("/username", (req, res) => {
-//   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
-//   res.render("urls_show", templateVars);
-// });
+app.post("/login", (req, res) => {
+  res.cookie(req.body.username)
+  res.redirect("/urls");
+});
