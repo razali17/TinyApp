@@ -4,6 +4,16 @@ var PORT = 8080;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+function generateRandomString() {
+  let result = '';
+  let chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890';
+  let charsLen = chars.length;
+  for (let i = 0; i < 6; i ++) {
+    result += chars.charAt(Math.floor(Math.random() * charsLen));
+  }
+  return result;
+}
+
 app.set("view engine", "ejs");
 
 var urlDatabase = {
@@ -52,12 +62,3 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-function generateRandomString() {
-  let result = '';
-  let chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890';
-  let charsLen = chars.length;
-  for (let i = 0; i < 6; i ++) {
-    result += chars.charAt(Math.floor(Math.random() * charsLen));
-  }
-  return result;
-}
