@@ -31,6 +31,11 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+app.get("/urls/new", (req, res) => {
+  let templateVars = {username: req.cookies["username"]};
+  res.render("urls_new", templateVars);
+});
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -52,10 +57,6 @@ app.post("/urls", (req, res) => {
   tinyString = generateRandomString();
   urlDatabase[tinyString] = req.body.longURL
   res.redirect("/urls/"+tinyString);         // Respond with 'Ok' (we will replace this)
-});
-
-app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
 });
 
 app.get("/urls/:shortURL", (req, res) => {
