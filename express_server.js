@@ -8,8 +8,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const users = {
@@ -63,14 +63,27 @@ function getUserByEmail(email) {
   }
 }
 
+function urlsForUser(id) {
+  urls = []
+  for (url in urlDatabase) {
+    if (urlDatabase[url].id === id) {
+      urls.push(url)
+    }
+  } return urls
+}
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
 app.get("/urls/new", (req, res) => {
   const userid = req.cookies.user_id
-  let templateVars = { user: users[userid] };
-  res.render("urls_new", templateVars);
+  if (userid) {
+    let templateVars = { user: users[userid] };
+    res.render("urls_new", templateVars);
+  } else {
+    res.redirect("/login")
+  }
 });
 
 app.get("/urls", (req, res) => {
@@ -80,8 +93,9 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  tinyString = generateRandomString();
-  urlDatabase[tinyString] = req.body.longURL
+  const tinyString = generateRandomString();
+  urlDatabase[tinyString].longURL = req.body.longURL
+  urlDatabase[tinyString]["userID"] = req.cookies.user_id
   res.redirect("/urls/"+tinyString);
 });
 
@@ -91,18 +105,19 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  urlDatabase[req.params.shortURL] = req.body.longURL
+  urlDatabase[req.params.shortURL].longURL = req.body.longURL
+  urlDatabase[tinyString]["userID"] = req.cookies.user_id
   res.redirect("/urls");
 });
 
 app.get("/urls/:shortURL", (req, res) => {
   const userid = req.cookies.user_id
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[userid]}
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[userid]}
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL];
+  const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
 
