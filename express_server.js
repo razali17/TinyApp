@@ -64,10 +64,10 @@ function getUserByEmail(email) {
 }
 
 function urlsForUser(id) {
-  urls = []
+  urls = {}
   for (url in urlDatabase) {
-    if (urlDatabase[url].id === id) {
-      urls.push(url)
+    if (urlDatabase[url].userID === id) {
+      urls = {longURL: urlDatabase[url].longURL, userID: id}
     }
   } return urls
 }
@@ -86,16 +86,23 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
+// app.get("/urls/:id", (req, res) => {
+//   res.render("urls_index", templateVars);
+// });
+
 app.get("/urls", (req, res) => {
   const userid = req.cookies.user_id
-  let templateVars = { urls: urlDatabase, user: users[userid]};
-  res.render("urls_index", templateVars);
+  if (userid) {
+    const userUrls = urlsForUser(userid)
+    let templateVars = { urls: userUrls, user: users[userid]};
+    res.render("urls_index", templateVars);
+  } else {res.redirect("/login")}
 });
 
 app.post("/urls", (req, res) => {
   const tinyString = generateRandomString();
-  urlDatabase[tinyString].longURL = req.body.longURL
-  urlDatabase[tinyString]["userID"] = req.cookies.user_id
+  console.log(tinyString)
+  urlDatabase[tinyString] = {longURL: req.body.longURL, userID:req.cookies.user_id}
   res.redirect("/urls/"+tinyString);
 });
 
@@ -106,7 +113,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/urls/:shortURL", (req, res) => {
   urlDatabase[req.params.shortURL].longURL = req.body.longURL
-  urlDatabase[tinyString]["userID"] = req.cookies.user_id
+  urlDatabase[tinyString].userID = req.cookies.user_id
   res.redirect("/urls");
 });
 
@@ -122,7 +129,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  let templateVars = { user: users[req.cookies["user_id"]]}
+  let templateVars = { user: users[req.cookies.user_id]}
   res.render("user_registration", templateVars);
 });
 
@@ -156,8 +163,8 @@ app.post("/login", (req, res) => {
   }
   if (!(users[userID].password === req.body.password)) {
     res.status(403).send("Incorrect Password")
-  } else if (userID && users[user].password === req.body.password) {
-    req.cookies.userID
+  } else if (userID && users[userID].password === req.body.password) {
+    req.cookies.user_id
     res.redirect("/urls");
   }
 });
