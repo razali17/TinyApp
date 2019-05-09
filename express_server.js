@@ -43,10 +43,20 @@ function emailExists(email) {
   }
 }
 
-function getUser(userID) {
+function getUserByID(userID) {
   for (user in users){
     if (userID === users[user]) {
       return user
+    }
+  }
+}
+
+function getUserByEmail(email) {
+  for (user in users){
+    for email in users[user] {
+      if (email === users[user][email]) {
+        return users[user]
+      }
     }
   }
 }
@@ -108,7 +118,6 @@ app.post("/register", (req, res) => {
     }
     res.cookie("user_id", id);
     res.redirect("/urls");
-    console.log(users)
   }
 })
 
@@ -125,6 +134,20 @@ app.post("/urls/:shortURL", (req, res) => {
   urlDatabase[req.params.shortURL] = req.body.longURL
   res.redirect("/urls/");
 });
+
+app.get("'login", (req, res) => {
+  const email = getuser()
+  res.cookie("user_id", )
+  res.redirect("/urls");
+})
+
+// app.post("/login", (req, res) => {
+//   const userID = getuser(req.body.email);
+
+
+//   }
+//   res.cookie("user_id", id);
+// })
 
 app.post("/login", (req, res) => {
   res.cookie("ussername", req.body.username)
