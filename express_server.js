@@ -25,6 +25,16 @@ const users = {
   }
 }
 
+function urlsForUser(id) {
+  urls = {}
+  for (shortUrl in urlDatabase) {
+    if (urlDatabase[shortUrl].userID === id) {
+      urls[shortUrl] = {longURL: urlDatabase[shortUrl].longURL}
+    }
+    console.log(urls)
+  } return urls
+}
+
 function generateRandomString() {
   let result = '';
   let chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890';
@@ -63,14 +73,6 @@ function getUserByEmail(email) {
   }
 }
 
-function urlsForUser(id) {
-  urls = {}
-  for (url in urlDatabase) {
-    if (urlDatabase[url].userID === id) {
-      urls = {longURL: urlDatabase[url].longURL, userID: id}
-    }
-  } return urls
-}
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
