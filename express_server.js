@@ -35,10 +35,18 @@ function generateRandomString() {
   return result;
 }
 
-function checkValidEmail(email) {
+function emailExists(email) {
   for (const user in users) {
     if (email === users[user].email) {
       return true
+    }
+  }
+}
+
+function getUser(userID) {
+  for (user in users){
+    if (userID === users[user]) {
+      return user
     }
   }
 }
@@ -52,7 +60,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = {username: req.cookies["username"]};
+  let templateVars = {user = getuser(req.cookie("user-id"))};
   res.render("urls_new", templateVars);
 });
 
@@ -61,7 +69,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies["username"] };
+  let templateVars = { urls: urlDatabase, user = getuser(req.cookie("user-id"))};
   res.render("urls_index", templateVars);
 });
 
@@ -72,7 +80,7 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username: req.cookies["username"]};
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user = getuser(req.cookie("user-id"))};
   res.render("urls_show", templateVars);
 });
 
@@ -82,14 +90,13 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  console.log(users)
   res.render("user_login");
 });
 
 app.post("/register", (req, res) => {
   const id = generateRandomString();
   console.log(checkValidEmail(req.body.email));
-  if (checkValidEmail(req.body.email)) {
+  if (emailExists(req.body.email)) {
     res.status(400).send("Email already exists")
   } else if (!req.body.email || !req.body.password) {
     res.status(400).send("Enter valid email and/or password");
