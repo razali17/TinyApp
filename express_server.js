@@ -1,10 +1,10 @@
-var express = require("express");
-var app = express();
-var PORT = 8080;
+const express = require("express");
+const app = express();
+const PORT = 8080;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 const urlDatabase = {
@@ -78,7 +78,14 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  let templateVars = {}
+  let id = generateRandomString();
+  users[id] = {
+    id,
+    email: req.body.email,
+    password: req.body.password
+  }
+  res.cookie("user_id", id);
+  res.redirect("/urls");
 })
 
 app.post("/urls/:shortURL/delete", (req, res) => {
@@ -92,7 +99,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 });
 app.post("/urls/:shortURL", (req, res) => {
   urlDatabase[req.params.shortURL] = req.body.longURL
-  res.redirect("/urls/");         // Respond with 'Ok' (we will replace this)
+  res.redirect("/urls/");
 });
 
 app.post("/login", (req, res) => {
