@@ -36,12 +36,11 @@ function generateRandomString() {
 }
 
 function checkValidEmail(email) {
-  let validEmail = true
   for (const user in users) {
-    if (email in user) {
-      validEmail = false
+    if (email === users[user].email) {
+      return true
     }
-  } return validEmail
+  }
 }
 
 app.listen(PORT, () => {
@@ -69,7 +68,7 @@ app.get("/urls", (req, res) => {
 app.post("/urls", (req, res) => {
   tinyString = generateRandomString();
   urlDatabase[tinyString] = req.body.longURL
-  res.redirect("/urls/"+tinyString);         // Respond with 'Ok' (we will replace this)
+  res.redirect("/urls/"+tinyString);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -83,23 +82,26 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
+  console.log(users)
   res.render("user_login");
 });
 
 app.post("/register", (req, res) => {
   const id = generateRandomString();
-  users[id] = {
-    id,
-    email: req.body.email,
-    password: req.body.password
-  }
-  if (!checkValidEmail(req.body.email)) {
+  console.log(checkValidEmail(req.body.email));
+  if (checkValidEmail(req.body.email)) {
     res.status(400).send("Email already exists")
   } else if (!req.body.email || !req.body.password) {
     res.status(400).send("Enter valid email and/or password");
   } else {
+    users[id] = {
+      id,
+      email: req.body.email,
+      password: req.body.password
+    }
     res.cookie("user_id", id);
     res.redirect("/urls");
+    console.log(users)
   }
 })
 
