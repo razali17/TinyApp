@@ -1,17 +1,14 @@
 <h1>TinyApp</h1>
-<a href='http://localhost:8080/urls/new'>Create New TinyURL</a>
+<%= const user = getUserByEmail(req.body.email) %>
 <% if (user) { %>
 <b>Currently logged in:</b> <%= user.email%></h5>
 <form method="POST" action="/logout/">
   <button type="logout" class="btn btn-primary">Logout</button>
   <% } else { %>
-  <form method="POST" action="/login/">
-    <div class="form-group mb-2">
-      <label for="email">email:</label>
-      <input class="form-control" type= "text" name="email" placeholder="Enter email"/>
-      <label for="password">email:</label>
-      <input class="form-control" type= password name="password" placeholder="Enter password"/>
-      <button type="submit" class="btn btn-primary">Register</button><% } %>
+<a href='http://localhost:8080/register'>Register</a>
+<a href='http://localhost:8080/login'>Login</a>
+< } %>
     </div>
   </form>
 </form>
+

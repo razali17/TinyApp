@@ -46,7 +46,7 @@ function emailExists(email) {
 function getUserByID(userID) {
   for (user in users){
     if (userID === users[user]) {
-      return user
+      return users[user]
     }
   }
 }
@@ -136,10 +136,12 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.get("'login", (req, res) => {
-  const email = getuser()
-  res.cookie("user_id", )
-  res.redirect("/urls");
+  res.render("user_login")
 })
+
+
+  // res.cookie("user_id", )
+  // res.redirect("/urls");
 
 // app.post("/login", (req, res) => {
 //   const userID = getuser(req.body.email);
@@ -150,8 +152,16 @@ app.get("'login", (req, res) => {
 // })
 
 app.post("/login", (req, res) => {
-  res.cookie("ussername", req.body.username)
+  const user = getUserByEmail(req.body.email)
+  if (!user) {
+    res.status(403).send("No user with specified email found");
+  }
+  if (!(user.password === req.body.password)) {
+    res.status(403).send("Incorrect Password")
+  } ekse if (user && user.password === req.body.password) {
+  res.cookie("user_id", id)
   res.redirect("/urls");
+  }
 });
 
 app.post("/logout", (req, res) => {
