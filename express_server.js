@@ -35,6 +35,15 @@ function generateRandomString() {
   return result;
 }
 
+function checkValidEmail(email) {
+  let validEmail = true
+  for (const user in users) {
+    if (email in user) {
+      validEmail = false
+    }
+  } return validEmail
+}
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
@@ -74,18 +83,24 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("/user_login");
+  res.render("user_login");
 });
 
 app.post("/register", (req, res) => {
-  let id = generateRandomString();
+  const id = generateRandomString();
   users[id] = {
     id,
     email: req.body.email,
     password: req.body.password
   }
-  res.cookie("user_id", id);
-  res.redirect("/urls");
+  if (!checkValidEmail(req.body.email)) {
+    res.status(400).send("Email already exists")
+  } else if (!req.body.email || !req.body.password) {
+    res.status(400).send("Enter valid email and/or password");
+  } else {
+    res.cookie("user_id", id);
+    res.redirect("/urls");
+  }
 })
 
 app.post("/urls/:shortURL/delete", (req, res) => {
@@ -103,7 +118,7 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username)
+  res.cookie("ussername", req.body.username)
   res.redirect("/urls");
 });
 
