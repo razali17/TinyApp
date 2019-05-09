@@ -1,7 +1,7 @@
 <h1>TinyApp</h1>
-<%= const user = getUserByEmail(req.body.email) %>
+<%= const user = (req.cookies.user_id) %>
 <% if (user) { %>
-<b>Currently logged in:</b> <%= user.email%></h5>
+<b>Currently logged in:</b> <%= users[user].email%></h5>
 <form method="POST" action="/logout/">
   <button type="logout" class="btn btn-primary">Logout</button>
   <% } else { %>
