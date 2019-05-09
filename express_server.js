@@ -67,23 +67,15 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-app.get("/", (req, res) => {
-  res.redirect("/urls");
-});
-
 app.get("/urls/new", (req, res) => {
-  const user = req.cookies.user_id
-  let templateVars = { user };
+  const userid = req.cookies.user_id
+  let templateVars = { user: users[userid] };
   res.render("urls_new", templateVars);
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
 app.get("/urls", (req, res) => {
-  const user = req.cookies.user_id
-  let templateVars = { urls: urlDatabase, user};
+  const userid = req.cookies.user_id
+  let templateVars = { urls: urlDatabase, user: users[userid]};
   res.render("urls_index", templateVars);
 });
 
@@ -94,8 +86,8 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  const user = req.cookies.user_id
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user}
+  const userid = req.cookies.user_id
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[userid]}
   res.render("urls_show", templateVars);
 });
 
@@ -105,7 +97,8 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("user_registration");
+  let templateVars = { user: users[req.cookies["user_id"]]}
+  res.render("user_registration", templateVars);
 });
 
 app.post("/register", (req, res) => {
@@ -140,7 +133,8 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("user_login")
+  let templateVars = { user: users[req.cookies["user_id"]]}
+  res.render("user_login", templateVars)
 })
 
 app.post("/login", (req, res) => {

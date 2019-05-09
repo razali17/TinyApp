@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include ../views/partials/_header %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
@@ -9,10 +8,12 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
+  <% include ../views/partials/_header %>
   <form method="POST" action="/register">
     <div class="form-group mb-2">
-      <label for="email">Enter an email and password to register:</label>
+      <label for="email">Enter an email to register:</label>
       <input class="form-control" type= "text" name="email" placeholder="Enter email address" style="width:300px"/>
+      <label for="email">Enter password:</label>
       <input class="form-control" type= password name="password" placeholder="Enter password" style="width:300px"/>
       <button type="submit" class="btn btn-primary">Register</button>
     </div>

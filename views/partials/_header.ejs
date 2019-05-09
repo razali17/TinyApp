@@ -1,13 +1,12 @@
 <h1>TinyApp</h1>
-<%= const user = (req.cookies.user_id) %>
 <% if (user) { %>
-<b>Currently logged in:</b> <%= users[user].email%></h5>
+<b>Currently logged in:</b> <%= user.email%></h5>
 <form method="POST" action="/logout/">
   <button type="logout" class="btn btn-primary">Logout</button>
   <% } else { %>
 <a href='http://localhost:8080/register'>Register</a>
 <a href='http://localhost:8080/login'>Login</a>
-< } %>
+<% } %>
     </div>
   </form>
 </form>
