@@ -66,7 +66,6 @@ function getUserByEmail(email) {
     for (eml in users[user]) {
       console.log(users[user][eml])
       if (email === users[user][eml]) {
-        console.log("found")
         return users[user].id
       }
     }
@@ -103,14 +102,15 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const tinyString = generateRandomString();
-  console.log(tinyString)
   urlDatabase[tinyString] = {longURL: req.body.longURL, userID:req.cookies.user_id}
   res.redirect("/urls/"+tinyString);
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect('/urls')
+  if (req.cookies.user_id === urlDatabase[req.params.shortURL].userID) {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect('/urls')
+  } else res.send("You don't have permission")
 });
 
 app.post("/urls/:shortURL", (req, res) => {
@@ -152,9 +152,8 @@ app.post("/register", (req, res) => {
   }
 })
 
-
 app.get("/login", (req, res) => {
-  let templateVars = { user: users[req.cookies["user_id"]]}
+  let templateVars = { user: users[req.cookies.user_id]}
   res.render("user_login", templateVars)
 })
 
@@ -166,7 +165,7 @@ app.post("/login", (req, res) => {
   if (!(users[userID].password === req.body.password)) {
     res.status(403).send("Incorrect Password")
   } else if (userID && users[userID].password === req.body.password) {
-    req.cookies.user_id
+    res.cookie("user_id", users[userID].id)
     res.redirect("/urls");
   }
 });
