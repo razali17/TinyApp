@@ -126,7 +126,7 @@ app.get("/urls/:shortURL", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = urlDatabase[req.params.shortURL]
   let longURL = shortURL.longURL;
-  res.redirect(longURL);
+  res.redirect("http://www."+longURL);
 });
 
 app.get("/register", (req, res) => {
