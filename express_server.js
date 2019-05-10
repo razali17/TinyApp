@@ -136,6 +136,9 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   const id = generateRandomString();
+  const bcrypt = require('bcrypt');
+  const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10);
   if (emailExists(req.body.email)) {
     res.status(400).send("Email already exists")
   } else if (!req.body.email || !req.body.password) {
@@ -144,7 +147,7 @@ app.post("/register", (req, res) => {
     users[id] = {
       id,
       email: req.body.email,
-      password: req.body.password
+      password
     }
     res.cookie("user_id", id);
     res.redirect("/urls");
@@ -161,9 +164,9 @@ app.post("/login", (req, res) => {
   if (!uID) {
     res.status(403).send("No user with specified email found");
   }
-  if (!(users[uID].password === req.body.password)) {
+  if (!(bcrypt.compareSync(req.body.password, users[uID].password)) {
     res.status(403).send("Incorrect Password")
-  } else if (uID && users[uID].password === req.body.password) {
+  } else if (uID && (bcrypt.compareSync(req.body.password, users[uID].password))) {
     res.cookie("user_id", users[uID].id)
     res.redirect("/urls");
   }
