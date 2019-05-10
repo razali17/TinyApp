@@ -114,9 +114,11 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
+  if (req.cookies.user_id === urlDatabase[req.params.shortURL].userID) {
   urlDatabase[req.params.shortURL].longURL = req.body.longURL
   urlDatabase[tinyString].userID = req.cookies.user_id
   res.redirect("/urls");
+  } else res.send("You do not have permission")
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -158,14 +160,14 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-  const userID = getUserByEmail(req.body.email)
-  if (!userID) {
+  const user-ID = getUserByEmail(req.body.email)
+  if (!user-ID) {
     res.status(403).send("No user with specified email found");
   }
-  if (!(users[userID].password === req.body.password)) {
+  if (!(users[user-ID].password === req.body.password)) {
     res.status(403).send("Incorrect Password")
-  } else if (userID && users[userID].password === req.body.password) {
-    res.cookie("user_id", users[userID].id)
+  } else if (userID && users[user-ID].password === req.body.password) {
+    res.cookie("user_id", users[user-ID].id)
     res.redirect("/urls");
   }
 });
