@@ -74,8 +74,9 @@ function getUserByEmail(email) {
   }
 }
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+app.get("/register", (req, res) => {
+  let templateVars = { user: users[req.session.user_id]};
+  res.render("user_registration", templateVars);
 });
 
 app.post("/register", (req, res) => {
@@ -173,13 +174,12 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect("http://www."+longURL);
 });
 
-app.get("/register", (req, res) => {
-  let templateVars = { user: users[req.session.user_id]};
-  res.render("user_registration", templateVars);
-});
-
 
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls");
+});
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
 });
