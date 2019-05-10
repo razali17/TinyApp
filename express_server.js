@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -64,7 +65,6 @@ function getUserByID(userID) {
 function getUserByEmail(email) {
   for (user in users){
     for (eml in users[user]) {
-      console.log(users[user][eml])
       if (email === users[user][eml]) {
         return users[user].id
       }
@@ -136,7 +136,6 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   const id = generateRandomString();
-  const bcrypt = require('bcrypt');
   const password = req.body.password;
   const hashedPassword = bcrypt.hashSync(password, 10);
   if (emailExists(req.body.email)) {
@@ -147,7 +146,7 @@ app.post("/register", (req, res) => {
     users[id] = {
       id,
       email: req.body.email,
-      password
+      password: hashedPassword
     }
     res.cookie("user_id", id);
     res.redirect("/urls");
@@ -164,7 +163,7 @@ app.post("/login", (req, res) => {
   if (!uID) {
     res.status(403).send("No user with specified email found");
   }
-  if (!(bcrypt.compareSync(req.body.password, users[uID].password)) {
+  if (!(bcrypt.compareSync(req.body.password, users[uID].password))) {
     res.status(403).send("Incorrect Password")
   } else if (uID && (bcrypt.compareSync(req.body.password, users[uID].password))) {
     res.cookie("user_id", users[uID].id)
