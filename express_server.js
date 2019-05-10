@@ -87,10 +87,6 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
-// app.get("/urls/:id", (req, res) => {
-//   res.render("urls_index", templateVars);
-// });
-
 app.get("/urls", (req, res) => {
   const userid = req.cookies.user_id
   if (userid) {
@@ -128,7 +124,8 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL].longURL;
+  let shortURL = urlDatabase[req.params.shortURL]
+  let longURL = shortURL.longURL;
   res.redirect(longURL);
 });
 
@@ -160,14 +157,14 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-  const user-ID = getUserByEmail(req.body.email)
-  if (!user-ID) {
+  const uID = getUserByEmail(req.body.email)
+  if (!uID) {
     res.status(403).send("No user with specified email found");
   }
-  if (!(users[user-ID].password === req.body.password)) {
+  if (!(users[uID].password === req.body.password)) {
     res.status(403).send("Incorrect Password")
-  } else if (userID && users[user-ID].password === req.body.password) {
-    res.cookie("user_id", users[user-ID].id)
+  } else if (uID && users[uID].password === req.body.password) {
+    res.cookie("user_id", users[uID].id)
     res.redirect("/urls");
   }
 });
