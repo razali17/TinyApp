@@ -187,9 +187,9 @@ app.post("/urls/:shortURL", (req, res) => {
   /* Check if client's cookie matches the user id for the short URL in the database. If so, allow
   the user to submit a new long URL */
   if (req.session.user_id === urlDatabase[req.params.shortURL].userID) {
-  urlDatabase[req.params.shortURL].longURL = req.body.longURL;
-  urlDatabase[req.params.shortURL].userID = req.session.user_id;
-  res.redirect("/urls");
+    urlDatabase[req.params.shortURL].longURL = req.body.longURL;
+    urlDatabase[req.params.shortURL].userID = req.session.user_id;
+    res.redirect("/urls");
   } else if (req.session.user_id) {
     res.status(403).send("You do not have permission to edit this url")
   } else {
@@ -198,21 +198,22 @@ app.post("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-  if (!(req.params.shortURL in urlDatabase)) {
   /* Check if client's cookie matches the user id for the short URL in the database. If so,
   show the url index for the given user. */
   if (req.session.user_id === urlDatabase[req.params.shortURL].userID){
-    res.send("Not a valid short url")
+    if (req.params.shortURL in urlDatabase) {
+      let userid = req.session.user_id;
+      let templateVars = { shortURL: req.params.shortURL,
+        longURL: urlDatabase[req.params.shortURL].longURL, user: users[userid]};
+      res.render("urls_show", templateVars);
+    } else {
+      res.status(404).send("Not a valid short URL");
+    }
+  } else if (!(req.session.user_id === urlDatabase[req.params.shortURL].userID)) {
+    res.status(403).send("This url is unavailable to you")
+  } else {
+    res.status(401).send("User not logged in")
   }
-  let userid = req.session.user_id;
-  let templateVars = { shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL].longURL, user: users[userid]};
-  res.render("urls_show", templateVars);
-} else if (!(req.session.user_id === urlDatabase[req.params.shortURL].userID)) {
-  res.status(403).send("This url is unavailable to you")
-} else {
-  res.status(401).send("User not logged in")
-}
 });
 
 app.get("/u/:shortURL", (req, res) => {
