@@ -220,7 +220,7 @@ app.get("/u/:shortURL", (req, res) => {
   if (req.params.shortURL in urlDatabase) {
     let shortURL = urlDatabase[req.params.shortURL];
     let longURL = shortURL.longURL;
-    res.redirect("/longURL");
+    res.redirect(longURL);
   } else {
     res.status(400).send("Not a valid short url")
   }
