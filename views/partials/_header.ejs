@@ -1,16 +1,14 @@
 <h1>TinyApp</h1>
 <% if (user) { %>
-<b>Currently logged in:</b> <%= user.email%></h5>
+<b>Currently logged in:</b> <%= user.email%></b>
 <form method="POST" action="/logout/">
-  <button type="logout" class="btn btn-primary">Logout</button>
-  <a href='http://localhost:8080/urls/new'>Create New Url</a>
-  <a href='http://localhost:8080/urls'>My Urls</a>
-
-  <% } else { %>
-<a href='http://localhost:8080/register'>Register</a>
-<a href='http://localhost:8080/login'>Login</a>
-<% } %>
-    </div>
-  </form>
+  <button type="logout" class="btn btn-outline-secondary">Logout</button>
 </form>
+<button onclick="location.href='/urls/new'" type="button">Create New Tiny Url</button>
+<button onclick="location.href='/urls'" type="button">My Urls</button>
+  <% } else { %>
+<button onclick="location.href='/register'" type="button">Register</button>
+<button onclick="location.href='/login'" type="button">Login</button>
+<% } %>
+
 

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include ../views/partials/_header %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -10,15 +9,16 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-  <h3> My URLs </h3>
-  <u1>
+  <% include ../views/partials/_header %>
+  <h3>My URLs</h3>
+  <ul class ="list-group list-group-flush">
     <%for (url in urls) {%>
-    <li><b><%= url %></b><%=': '+urls[url].longURL%></li>
-  <form method="POST" action="/urls/<%= url %>/delete">
-    <button type="submit" class="btn btn-danger">Delete</button>
-  </form>
-  <a href='/urls/<%= url %>'>Edit</a>
+    <li class="list-group-item" style="width:500px"/> Short Url: <b> <%= url %></b> for long Url: <b><%=': '+urls[url].longURL%></b>
+    <form method="POST" action="/urls/<%= url %>/delete">
+      <input type="submit" value="Delete" class="btn btn-outline-danger">
+      <button onclick="location.href='/urls/<%= url %>'" type="button">Edit</button>
+    </li>
     <% }; %>
-  </u1>
+  </ul>
 </body>
 </html>

@@ -12,9 +12,9 @@
   <form method="POST" action="/urls/<%= shortURL %>">
     <div class="form-group mb-2">
       <label for="longURL">Enter a URL to shorten:</label>
-      <input class="form-control" type= "text" name="longURL" placeholder="Enter a new URL"/>
+      <input class="form-control" type="url" name="longURL" placeholder="Enter a new URL"/>
       <button type="submit" class="btn btn-primary">Save URL</button>
-      <h5> Your current url is: <%= longURL %> </h5>
+      <h5>Your short url for<b><%= longURL %></b> is: <b><%= shortURL %></b></h5>
     </div>
   </form>
 </body>
