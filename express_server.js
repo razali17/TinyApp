@@ -228,7 +228,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 
 app.post("/logout", (req, res) => {
-  req.session = null;
+  req.session.user_id = null;
   res.redirect("/");
 });
 
